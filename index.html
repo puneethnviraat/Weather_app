@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Current Weather</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script type="text/javascript">
+
+		
+		$(document).ready(function () {
+
+			var x = document.getElementById("demo");
+
+		
+				if (navigator.geolocation) {
+					navigator.geolocation.getCurrentPosition(showPosition);
+				} else { 
+					x.innerHTML = "Geolocation is not supported by this browser.";
+				}
+
+
+				function showPosition(position) {
+					var lati=position.coords.latitude;
+					var logi=position.coords.longitude;
+					x.innerHTML = "Latitude: " + lati + "<br>Longitude: " +logi;
+
+
+					var weather="https://api.openweathermap.org/data/2.5/weather?lat="+lati+"&lon="+logi+"&appid=7658e29ee6204da60dcec48c4cd297a5&units=metric"
+					$.ajax({
+						url:weather,
+						method:'get',	
+						dataType:"json",
+						success:function(data){
+							$('#resultDiv1').html('weather:'+data.weather[0].main+'<br/>'+'Description:'+data.weather[0].description);
+
+
+							$('#resultDiv2').html('temp:'+data.main.temp+'C<br/>'+'pressure:'+data.main.pressure+'<br/>'+'humidity:'+data.main.humidity);
+
+							$('#resultDiv3').html('Wind speed:'+data.wind.speed+' meters/s<br/>'+'Deg:'+data.wind.deg);
+
+							$('#resultDiv4').html('Country:'+data.sys.country+'<br/>'+'City:'+data.name);
+					var weatherr=(data.weather[0].main).toLowerCase();
+						switch (weatherr) {
+								case 'clear':
+					$("#information").addClass('bg1');
+					break;
+							case 'clouds':
+					$("#information").addClass('bg2');
+					break;
+							case 'rain':
+					$("#information").addClass('bg3');
+					break;
+						case 'sunny':
+					$("#information").addClass('bg4');
+					break;
+					 default:
+					$("#information").css("background-image","LightBlue")
+
+				}
+
+				var tempUnit = 'C';
+             var currentTempInCelsius=Math.round(data.main.temp * 10) / 10;
+      $("#temp").text(currentTempInCelsius + " " + String.fromCharCode(176));
+      $("#tempunit").text(tempUnit);
+  $("#tempunit").click(function () {
+    var currentTempUnit = $("#tempunit").text();
+    var newTempUnit = currentTempUnit == "C" ? "F" : "C";
+    $("#tempunit").text(newTempUnit);
+    if (newTempUnit == "F") {
+      var fahTemp = Math.round(parseInt($("#temp").text()) * 9 / 5 + 32);
+      $("#temp").text(fahTemp + " " + String.fromCharCode(176));
+    } else {
+      $("#temp").text(currentTempInCelsius + " " + String.fromCharCode(176));
+    }
+  });
+
+						}
+					});
+				
+				}
+				
+		});
+
+	</script>
+	<style type="text/css">
+		body{
+ items-align:center;
+  text-align:center;
+  content-align:center;
+  background-image:url("https://www.bestattravel.co.uk/the-edit/wp-content/uploads/2017/09/Generic-Beach-shutterstock_103605299.jpg");
+  font-size:20px;
+
+ }
+#information{
+  
+  background-color:gray;
+  min-height: 500px;
+  width: 300px;
+  margin-top: 30px;
+  border-radius:5px;
+}
+#getLocation{
+	margin-top: 20px;
+	
+}
+.bg1 
+{
+  background-image: url(https://cdn.pixabay.com/photo/2013/08/22/07/43/sky-174648_640.jpg);
+  background-repeat:no-repeat;
+
+}
+
+.bg2 
+{
+  background-image: url(https://www.siasat.com/wp-content/uploads/2018/02/Cloudy.jpg);
+  background-repeat:no-repeat;
+
+}
+.bg3 
+{
+  background-image: url(https://i.pinimg.com/736x/a8/d1/26/a8d1262cf3b1d709e3971c3f42540b36--rainy-weather-rainy-days.jpg);
+  background-repeat:no-repeat;
+
+}
+.bg4
+{
+  background-image: url(https://thumbs.dreamstime.com/b/sunny-weather-green-field-7265116.jpg);
+  background-repeat:no-repeat;
+
+}
+#tempunit{
+	background-color:wheat;
+}
+h1{
+	color:#D9588F;
+	margin-top:10px;
+}
+
+
+</style> 
+</head>
+<body><center>
+	<div id="information">
+		<h1>Hey, "What's up"</h1>
+		<!-- <button id="getLocation">Check It</button> -->
+		<p id="demo"></p>		<div id="resultDiv1"></div>
+		<p><span id="temp"></span><span class="temp" id="tempunit" ></span></p>
+		<div id="resultDiv2"></div>
+		<div id="resultDiv3"></div>
+
+		<div id="resultDiv4" style="font-weight:bold"></div>
+		<h4>Have Funn!!! &#9786;</h4>
+
+		<FOOTER>puneethnviraat@gmail.com</FOOTER>
+
+	</div></center>
+
+</body>
+</html>
